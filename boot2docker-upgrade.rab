@@ -1,28 +1,126 @@
-= タイトル
+= boot2docker upgrade
 
-# : subtitle
-#    サブタイトル
+: subtitle
+   1.3 での新機能など
 : author
    Kazuhiro NISHIYAMA
 # : institution
 #    所属
-# : content-source
-#    イベント名
-# : date
-#    2014/11/13
-# : allotted-time
-#    5m
-# : theme
-#    default
+: content-source
+   第5回 コンテナ型仮想化の情報交換会＠大阪
+: date
+   2014/11/14
+: allotted-time
+   5m
+: theme
+   default
 
-= 最初のスライド
+= 自己紹介
 
-  * 項目1
-  * 項目2
-  * 項目3
+  * 西山 和広
+  * @znz (twitter など)
+  * Ruby Committer
 
-= 二番目のスライド
+= boot2docker とは?
 
-  # image
-  # src = https://raw.github.com/rabbit-shocker/rabbit/master/sample/lavie.png
-  # relative_height = 100
+  * docker が動く VM (仮想マシン) を簡単に作成や管理
+  * docker 専用 vagrant のようなもの
+  * Docker Inc. が作成
+
+= インストール
+
+  * brew install boot2docker
+  * GUI インストーラもある
+    * 使ったことがないので詳細は知りません
+
+= 使い方
+
+  * boot2docker init
+  * boot2docker up
+  * boot2docker ssh
+  * boot2docker down
+  * boot2docker delete
+
+= boot2docker init
+
+  * ISO ダウンロード
+  * ssh 鍵作成
+  * VirtualBox の VM 作成
+
+= boot2docker up
+
+  * VM 起動
+  * docker コマンド用環境変数の情報表示
+
+= ホスト側の docker から操作
+
+  * 環境変数は自分で設定
+    * up 時に表示された export などを実行
+      または
+    * ((%$(boot2docker shellinit)%))
+  * あとは普通に docker コマンドで使うだけ
+
+= boot2docker ssh
+
+  * docker ホスト側に ssh で入って作業可能
+  * ((%vagrant ssh%)) のようなもの
+
+= boot2docker down
+
+  * 使い終わったら VM 停止
+  * boot2docker stop や boot2docker halt でも同じ
+
+= boot2docker のアンインストール
+
+  * VM 削除
+    * ((%boot2docker delete%))
+  * ssh 鍵ペア削除
+    * ((%rm ~/.ssh/id_boot2docker*%))
+  * ISO などの削除
+    * ((%rm -r ~/.boot2docker%))
+
+= VM のディスク
+
+  * ISO : 不変部分 (システム)
+  * HDD : 可変部分 (docker のイメージなど)
+
+= boot2docker upgrade
+
+  * boot2docker のバージョンアップ
+  * VM が起動していたら止める
+  * ISO を更新するだけ
+  * ((*HDD 部分は使い回せる*))
+
+= boot2docker 1.3 の新機能
+
+  * TLS support
+  * Users を自動共有
+
+= TLS support
+
+  * ((%DOCKER_HOST=tcp://192.168.59.103:2375%)) から
+  * ((%DOCKER_HOST=tcp://192.168.59.103:2376%)) に変更
+  * (({DOCKER_CERT_PATH})) と (({DOCKER_TLS_VERIFY})) も設定
+
+= Users を自動共有
+
+  * ホスト - boot2docker-vm - docker インスタンス
+  * ホストと boot2docker-vm で (({/Users})) を共有
+    * Windows なら (({/c/Users}))
+  * ((%docker run -v /Users/...:...%)) で使用
+
+= boot2docker, please format-me
+
+  * ((%boot2docker ssh%)) で入るとホームディレクトリにあるファイル
+  * authorized_keys と一緒に (({/var/lib/boot2docker/userdata.tar})) に入っている
+
+= boot2docker, please format-me
+
+  * ((%boot2docker init%)) で tar から無理矢理 vmdk 作成
+  * /etc/rc.d/automount でフォーマットするための MAGIC として使用
+  * つまり初回起動後には不要
+
+= 参考
+
+  * https://github.com/boot2docker/boot2docker
+  * https://github.com/boot2docker/boot2docker-cli
