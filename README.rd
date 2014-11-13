@@ -1,6 +1,6 @@
-= TODO: スライドのタイトル
+= boot2docker upgrade
 
-TODO: スライドの説明
+boot2docker の基本的な機能の紹介と 1.3 で変わっていた機能についての話です。
 
 == 作者向け
 
